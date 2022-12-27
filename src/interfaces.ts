@@ -144,9 +144,20 @@ export interface ISbStory {
 	headers: any
 }
 
+export interface ISbMemoryType extends ISbResult {
+	[key: string]: any
+}
+
 export interface ISbCache {
-	type?: 'none' | 'memory'
+	type?: 'none' | 'memory' | 'custom'
 	clear?: 'auto' | 'manual'
+}
+
+export interface ISbCacheProvider {
+	get: (key: string) => any
+	set: (key: string, content: ISbResult) => void
+	getAll: () => any
+	flush: () => void
 }
 
 export interface ISbConfig {
