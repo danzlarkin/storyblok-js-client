@@ -7,6 +7,7 @@ import Method from './constants'
 import {
 	ISbStoriesParams,
 	ISbCache,
+	ISbCacheProvider,
 	ISbConfig,
 	ISbLinkURLObject,
 	ISbResult,
@@ -39,19 +40,8 @@ type RelationsType = {
 	[key: string]: any
 }
 
-interface IMemoryType extends ISbResult {
-	[key: string]: any
-}
-
 interface ISbFlatMapped {
 	data: any
-}
-
-interface ICacheProvider {
-	get: (key: string) => IMemoryType | void
-	set: (key: string, content: ISbResult) => void
-	getAll: () => IMemoryType | void
-	flush: () => void
 }
 
 interface ISbResponseData {
@@ -584,7 +574,7 @@ class Storyblok {
 		}
 	}
 
-	private cacheProvider(): ICacheProvider {
+	private cacheProvider(): ISbCacheProvider {
 		switch (this.cache.type) {
 			case 'memory':
 				return {
@@ -601,6 +591,8 @@ class Storyblok {
 						memory = {}
 					},
 				}
+			case 'custom': {
+				return this.cache.provider
 			default:
 				return {
 					get() {
